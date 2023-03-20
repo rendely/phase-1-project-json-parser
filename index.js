@@ -20,6 +20,7 @@ function addDiv(data) {
     const el = document.createElement('div');
     const val = (typeof data[key] === 'object' ? (Array.isArray(data[key]) ? `Array: ${data[key].length}` : 'object') : data[key])
     el.innerText = `${key}: ${val}`;
+    if (typeof data[key] === 'object') el.setAttribute('object','');
     this.appendChild(el);
     
     el.addEventListener('click', function (e) {
@@ -6132,5 +6133,5 @@ data2 = JSON.parse(json);
 Object.keys(data).forEach(d => {
   const obj = {}
   obj[d] = data[d];
-  addDiv.call(document.body, obj);
+  addDiv.call(document.querySelector('main'), obj);
 })
