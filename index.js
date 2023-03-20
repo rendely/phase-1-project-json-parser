@@ -21,7 +21,7 @@ function addDiv(data) {
     const el = document.createElement('div');
     const val = (typeof data[key] === 'object' ? (Array.isArray(data[key]) ? `Array: ${data[key].length}` : (data[key] === null ? 'null' : 'object')) : String(data[key]))
     el.innerText = `${key}: ${val.slice(0,100)}`;
-    if (!!val.match('\.gif')) el.innerHTML += `<img src="${val}" width="200"/>`
+    if (!!val.match('\.gif|.jpg|.jpeg|.png')) el.innerHTML += `<img src="${val}" width="200"/>`
     if (typeof data[key] === 'object') el.setAttribute('object','');
     if (data[key] === null) el.setAttribute('null','');
     this.appendChild(el);
