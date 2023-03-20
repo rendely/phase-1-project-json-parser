@@ -13,11 +13,15 @@ Developers frequently need to inspect new JSON data sources. While there are mul
 - Load example JSON data from one of several free APIs
 - Preview entire JSON file with color coding to distinguish objects, arrays and other values
 - Dropdown to choose number of levels of depth displayed
-- Click to toggle collapsing/expanding
+- Hover to show more actions
+  - Click to toggle collapsing/expanding
+  - Click to get path for selecting this value in javascript code
 - Filter by term to only show matching keys
 - Filter by term to only show matching values
+- Sort by alphabetical, longest to shortest
 - Inline preview of images
 - Keyboard shortcuts for faster navigation/hiding/showing/filtering
+
 
 ## The API data you'll be using and how you'll use it
 
@@ -59,7 +63,7 @@ OK
 - Click: for collapse/expand of a section of the JSON
 - Input: for filtering with a term
 - Keydown: for keyboard shortcuts
-- (TBD) Scroll: show the current location in the JSON data
+- Mouseover/Mouseout: show additional actions on a value
 
 ### Each of your event listeners should also have its own unique callback function. These must be added using JavaScript's .addEventListener() method
 
