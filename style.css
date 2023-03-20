@@ -13,3 +13,7 @@ div {
 div[object]{
   background-color: bisque;
 }
+
+.hidden {
+  display: none;
+}

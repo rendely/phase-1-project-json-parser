@@ -6135,3 +6135,24 @@ Object.keys(data).forEach(d => {
   obj[d] = data[d];
   addDiv.call(document.querySelector('main'), obj);
 })
+
+function filterKeep(string){
+  allDivs = document.querySelectorAll('div');
+  allDivs.forEach(d => {
+    const parentText = Array.from(d.childNodes)
+    .filter(node => node.nodeType === Node.TEXT_NODE)
+    .map(node => node.textContent.trim())
+    .join(" ");
+    if (!parentText.match(string)){
+      d.classList.add('hidden');
+    }
+  })
+}
+
+function unfilter(){
+  allDivs = document.querySelectorAll('div');
+  allDivs.forEach(d => {
+          d.classList.remove('hidden');
+    }
+  )
+}
