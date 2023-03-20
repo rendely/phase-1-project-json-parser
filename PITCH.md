@@ -1,5 +1,9 @@
 # Phase 1 Project Pitch: JSON Parser
 
+## Requirements:
+
+https://github.com/learn-co-curriculum/phase-1-javascript-project-mode
+
 ## The basic story of your application
 
 Developers frequently need to inspect new JSON data sources. While there are multiple free tools online, they are missing advanced features, which would make analyzing complex JSON files easier.
