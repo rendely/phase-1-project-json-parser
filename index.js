@@ -18,8 +18,8 @@ function addDiv(data) {
   const keys = Object.keys(data);
   for (const key of keys) {
     const el = document.createElement('div');
-    const val = (typeof data[key] === 'object' ? (Array.isArray(data[key]) ? `Array: ${data[key].length}` : 'object') : data[key])
-    el.innerText = `${key}: ${val}`;
+    const val = (typeof data[key] === 'object' ? (Array.isArray(data[key]) ? `Array: ${data[key].length}` : 'object') : String(data[key]))
+    el.innerText = `${key}: ${val.slice(0,100)}`;
     if (typeof data[key] === 'object') el.setAttribute('object','');
     this.appendChild(el);
     
@@ -6129,7 +6129,7 @@ json = `
 }
 `;
 
-data2 = JSON.parse(json);
+data = JSON.parse(json);
 
 Object.keys(data).forEach(d => {
   const obj = {}
@@ -6158,3 +6158,8 @@ function unfilter(){
     }
   )
 }
+
+document.querySelector('#filter').addEventListener('input', (e)=>{
+  unfilter();
+  filterKeep(e.target.value);
+})
