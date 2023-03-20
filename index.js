@@ -15,19 +15,24 @@ function addDiv(data) {
     this.innerText += ` ${JSON.stringify(data)}`;
     return 'done';
   }
+  if (data === null) return 'null';
   const keys = Object.keys(data);
   for (const key of keys) {
     const el = document.createElement('div');
-    const val = (typeof data[key] === 'object' ? (Array.isArray(data[key]) ? `Array: ${data[key].length}` : 'object') : String(data[key]))
+    const val = (typeof data[key] === 'object' ? (Array.isArray(data[key]) ? `Array: ${data[key].length}` : (data[key] === null ? 'null' : 'object')) : String(data[key]))
     el.innerText = `${key}: ${val.slice(0,100)}`;
     if (typeof data[key] === 'object') el.setAttribute('object','');
+    if (data[key] === null) el.setAttribute('null','');
     this.appendChild(el);
+    if (typeof data[key] === 'object') addDiv.call(el, data[key]);
     
-    el.addEventListener('click', function show(e) {
+    el.addEventListener('click', function toggleShow(e) {
       //Stop propogation so we don't also affect div above
       e.stopPropagation();
-      if (typeof data[key] === 'object') addDiv.call(el, data[key]);
-      el.removeEventListener('click', show);
+      Array.from(el.children).forEach(c =>{
+        c.classList.contains('hidden') ? c.classList.remove('hidden') : c.classList.add('hidden')        
+      })
+      // el.removeEventListener('click', show);
     });
   }
 }
@@ -6163,3 +6168,6 @@ document.querySelector('#filter').addEventListener('input', (e)=>{
   unfilter();
   filterKeep(e.target.value);
 })
+
+//TODO:
+//Change it to show it all expanded by default and then click to toggle hiding on/off
