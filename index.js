@@ -21,11 +21,11 @@ function addDiv(data) {
     const val = (typeof data[key] === 'object' ? (Array.isArray(data[key]) ? `Array: ${data[key].length}` : 'object') : data[key])
     el.innerText = `${key}: ${val}`;
     this.appendChild(el);
-    if 
+    
     el.addEventListener('click', function (e) {
       //Stop propogation so we don't also affect div above
       e.stopPropagation();
-      addDiv.call(el, data[key]);
+      if (typeof data[key] === 'object') addDiv.call(el, data[key]);
     });
   }
 }
