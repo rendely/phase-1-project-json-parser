@@ -2,7 +2,7 @@ data = {
   first: {
     hi: 'hi',
     second: {
-      third: [1, 2, 3, 4]
+      third: [{img: 'asdf'},{img: 'asdf'}]
     }
   },
   secondouter: {
@@ -23,10 +23,11 @@ function addDiv(data) {
     if (typeof data[key] === 'object') el.setAttribute('object','');
     this.appendChild(el);
     
-    el.addEventListener('click', function (e) {
+    el.addEventListener('click', function show(e) {
       //Stop propogation so we don't also affect div above
       e.stopPropagation();
       if (typeof data[key] === 'object') addDiv.call(el, data[key]);
+      el.removeEventListener('click', show);
     });
   }
 }
@@ -6139,10 +6140,11 @@ Object.keys(data).forEach(d => {
 function filterKeep(string){
   allDivs = document.querySelectorAll('div');
   allDivs.forEach(d => {
-    const parentText = Array.from(d.childNodes)
-    .filter(node => node.nodeType === Node.TEXT_NODE)
-    .map(node => node.textContent.trim())
-    .join(" ");
+    // const parentText = Array.from(d.childNodes)
+    // .filter(node => node.nodeType === Node.TEXT_NODE)
+    // .map(node => node.textContent.trim())
+    // .join(" ");
+    const parentText = d.textContent; 
     if (!parentText.match(string)){
       d.classList.add('hidden');
     }
