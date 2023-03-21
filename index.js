@@ -20,8 +20,8 @@ function addDiv(data) {
   for (const key of keys) {
     const el = document.createElement('div');
     const val = (typeof data[key] === 'object' ? (Array.isArray(data[key]) ? `Array: ${data[key].length}` : (data[key] === null ? 'null' : 'object')) : String(data[key]))
-    el.innerText = `${key}: ${val.slice(0,100)}`;
-    if (!!val.match('\.gif|.jpg|.jpeg|.png')) el.innerHTML += `<img src="${val}" width="200" height="200"/>`
+    el.innerHTML = `<item-key>${key}:</item-key> <item-value> ${val.slice(0,100)}</item-value>`;
+    // if (!!val.match('\.gif|.jpg|.jpeg|.png')) el.innerHTML += `<img src="${val}" width="200" height="200"/>`
     if (typeof data[key] === 'object') el.setAttribute('object','');
     if (data[key] === null) el.setAttribute('null','');
     this.appendChild(el);

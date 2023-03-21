@@ -11,17 +11,19 @@ Developers frequently need to inspect new JSON data sources. While there are mul
 ## The core features of your MVP
 
 - Load example JSON data from one of several free APIs
-- Preview entire JSON file with color coding to distinguish objects, arrays and other values
+- Or paste in text data, highlight any errors (stretch goal)
+- Preview entire JSON file with color coding to distinguish objects, arrays and other values. Breadcrums to know where in JSON object item is located.
 - Dropdown to choose number of levels of depth displayed
 - Hover to show more actions
   - Click to toggle collapsing/expanding
-  - Click to get path for selecting this value in javascript code
+  - Click to get path for selecting this value in javascript code (and generate javascript code to select it or all similar from set of siblings)
+- Compare button to compare same key across siblings
+- Pin button to pin the path + value to a pinned section (and track all the data of interest)
 - Filter by term to only show matching keys
 - Filter by term to only show matching values
 - Sort by alphabetical, longest to shortest
 - Inline preview of images
 - Keyboard shortcuts for faster navigation/hiding/showing/filtering
-
 
 ## The API data you'll be using and how you'll use it
 

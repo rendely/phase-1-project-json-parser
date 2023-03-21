@@ -1,3 +1,6 @@
+body{
+  background-color: darkslategray;
+}
 main{
   margin: auto;
   max-width: 800px;
@@ -5,26 +8,34 @@ main{
 }
 div {
   margin-top: 5px;
-  padding: 10px;
+  margin-left: 20px;
+  padding: 5px;
   border: 1px solid #000000;
-  background-color: aliceblue;
+  background-color: lightblue;
+  color: #404040;
+}
+
+item-value{
+  color: black;
 }
 
 div[object]{
-  background-color: bisque;
+  background-color: aliceblue;
 }
 
 div[null]{
-  background-color: gray;
+  background-color: lightblue(204, 227, 235);
+  color: #696969;
 }
 .hidden {
   display: none;
 }
 
 header{
+  color: white;
   position: sticky;
   top:0;
   z-index: 1;
-  background-color: white;
+  background-color:darkslategray;
   padding: 10px 10px 10px 10px;
 }
