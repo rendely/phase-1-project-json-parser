@@ -1,7 +1,8 @@
 fetch("https://www.reddit.com/r/news.json")
 .then(r => r.json())
-.then(data => {
-  
+.then(allData => {
+//only take list of reddit posts
+const data = allData.data.children;
 Object.keys(data).forEach(d => {
   const obj = {}
   obj[d] = data[d];
