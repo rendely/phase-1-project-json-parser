@@ -1,6 +1,6 @@
 // Initializes the page 
 init();
-function init(i=0) {
+function init(i=3) {
   const defaultUrls = [
     'https://www.reddit.com/r/gifs.json',
     'https://anapioficeandfire.com/api/characters/583',
@@ -53,6 +53,7 @@ function renderDOMWithJSON(data) {
     this.appendChild(itemElement);
     // Add callback to make collapsible
     addCollapsibleEventListener.call(itemElement);
+    
     // recursively call render DOM function if object/array, otherwise it's a terminal item 
     if (itemType === 'object' || itemType === 'array') {
       renderDOMWithJSON.call(itemElement, data[key])
@@ -63,6 +64,7 @@ function renderDOMWithJSON(data) {
       // Add click event listern to make it easy to copy key or value
       addSelectItemEventListener(itemElement.querySelector('.key'));
       addSelectItemEventListener(itemElement.querySelector('.value'));
+      addMouseOverEventListener(itemElement.querySelector('.value'));
     };
   }
 }
@@ -238,6 +240,23 @@ document.addEventListener('keyup', (e) => {
       break;
   }
 })
+
+// Trigger behaviors when hovering over item
+function addMouseOverEventListener(node){
+  node.addEventListener('mouseover', (e) =>{
+    if (e.target.innerText.match('png$|jpg$|jpeg$|gifv$|gif$')) {
+      console.log('mouseover',e.target);
+      const img = document.createElement('img');
+      img.className = 'preview';
+      img.src = e.target.innerText;
+      node.appendChild(img);
+    }
+  })
+  node.addEventListener('mouseout', (e) =>{
+    console.log('mouseout',e.target);
+    if (node.querySelector('img')) node.querySelector('img').remove();
+  })
+}
 
 
 // Triggers filtering from text input
