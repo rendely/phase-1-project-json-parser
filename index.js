@@ -3,7 +3,7 @@ init();
 function init() {
   const defaultUrls = ['https://www.reddit.com/r/gifs.json',
     'https://anapioficeandfire.com/api/characters/583'];
-  fetchJSON(defaultUrls[0]);
+  fetchJSON(defaultUrls[1]);
 };
 
 // Fetches JSON data
@@ -39,12 +39,15 @@ function renderDOMWithJSON(data) {
     if (itemType === 'null') itemElement.classList.add('null');
     this.appendChild(itemElement);
     addCollapsibleEventListener.call(itemElement);
+
     // recursively call render DOM function if object, otherwise it's a terminal item 
     if (itemType === 'object' || itemType === 'array') {
       renderDOMWithJSON.call(itemElement, data[key])
     }
     else {
       itemElement.classList.add('terminal');
+      addSelectItemEventListener(itemElement.querySelector('.key'));
+      addSelectItemEventListener(itemElement.querySelector('.value'));
     };
 
   }
@@ -99,7 +102,7 @@ function valueFormat(value) {
 // Gets an icon image based on the item type
 function getTypeIcon(itemType) {
   let iconFile = '';
-  switch(itemType){
+  switch (itemType) {
     case 'array': iconFile = 'array.svg'; break;
     case 'empty object': iconFile = 'object.svg'; break;
     case 'object': iconFile = 'object.svg'; break;
@@ -137,3 +140,15 @@ document.querySelector('#filter').addEventListener('input', (e) => {
   unfilter();
   filterKeep(e.target.value);
 })
+
+// Selects entire value when clicked
+function addSelectItemEventListener(node) {
+  node.addEventListener('click', () => {
+    const selection = window.getSelection();
+    const range = document.createRange();
+    range.selectNodeContents(node);
+    selection.removeAllRanges();
+    selection.addRange(range);
+  })
+
+}
