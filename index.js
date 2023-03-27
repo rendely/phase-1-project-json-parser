@@ -1,12 +1,17 @@
 // Initializes the page 
 init();
 function init() {
-  const defaultUrls = ['https://www.reddit.com/r/gifs.json',
-    'https://anapioficeandfire.com/api/characters/583'];
-  fetchJSON(defaultUrls[0]);
+  const defaultUrls = [
+    'https://www.reddit.com/r/gifs.json',
+    'https://anapioficeandfire.com/api/characters/583',
+    'https://chroniclingamerica.loc.gov/suggest/titles/?q=maryland',
+    'https://api.disneyapi.dev/characters'
+  ];
+  fetchJSON(defaultUrls[3]);
 };
 let shouldSort = true;
 var currentData;
+
 // Fetches JSON data
 function fetchJSON(url) {
   fetch(url)
@@ -18,37 +23,6 @@ function fetchJSON(url) {
       //start rendering the DOM
       renderDOMWithJSON.call(document.querySelector('main'), data)
     })
-}
-
-// Sorts by type
-function sortByType(a,b){
-  const aSortValue = getSortValue(this[a]);
-  const bSortValue = getSortValue(this[b]);
-  if (aSortValue > bSortValue) return 1;
-  if (aSortValue < bSortValue) return -1;
-  return 0;
-}
-
-function sortByKey(a,b){
-  const aSortValue = a;
-  const bSortValue = b;
-  if (aSortValue > bSortValue) return 1;
-  if (aSortValue < bSortValue) return -1;
-  return 0;
-}
-
-function getSortValue(value){
-  const itemType = getItemType(value);
-  switch (itemType) {
-    case 'array': return 7
-    case 'object': return 6
-    case 'empty object': return 5
-    case 'null': return 4
-    case 'boolean': return 3
-    case 'string': return 2
-    case 'number': return 1
-    default: return 100
-  }
 }
 
 // Populates DOM based on object data
@@ -83,7 +57,6 @@ function renderDOMWithJSON(data) {
       addSelectItemEventListener(itemElement.querySelector('.key'));
       addSelectItemEventListener(itemElement.querySelector('.value'));
     };
-
   }
 }
 
@@ -153,8 +126,8 @@ function getTypeIcon(itemType) {
 function filterKeep(string) {
   allDivs = document.querySelectorAll('div.item');
   allDivs.forEach(d => {
-    const textContent = d.textContent;
-    if (!textContent.match(string)) {
+    const textContent = d.textContent.toLowerCase();
+    if (!textContent.match(string.toLowerCase())) {
       d.classList.add('hidden');
     }
   })
@@ -165,8 +138,7 @@ function unfilter() {
   allDivs = document.querySelectorAll('div');
   allDivs.forEach(d => {
     d.classList.remove('hidden');
-  }
-  )
+  })
 }
 
 // Triggers filtering from text input
@@ -176,10 +148,10 @@ document.querySelector('#filter').addEventListener('input', (e) => {
 })
 
 // Triggers sorting/not sorting 
-document.querySelector('#sort').addEventListener('input', (e)=>{
-   shouldSort = !shouldSort;
-   document.querySelector('main').innerHTML = '';
-   renderDOMWithJSON.call(document.querySelector('main'), currentData)
+document.querySelector('#sort').addEventListener('input', (e) => {
+  shouldSort = !shouldSort;
+  document.querySelector('main').innerHTML = '';
+  renderDOMWithJSON.call(document.querySelector('main'), currentData)
 })
 
 // Selects entire value when clicked
@@ -192,4 +164,38 @@ function addSelectItemEventListener(node) {
     selection.addRange(range);
   })
 
+}
+
+
+// Sorts by type
+function sortByType(a, b) {
+  const aSortValue = getSortValue(this[a]);
+  const bSortValue = getSortValue(this[b]);
+  if (aSortValue > bSortValue) return 1;
+  if (aSortValue < bSortValue) return -1;
+  return 0;
+}
+// Sorts by key alphabetical
+function sortByKey(a, b) {
+  const aSortValue = a;
+  const bSortValue = b;
+  if (aSortValue > bSortValue) return 1;
+  if (aSortValue < bSortValue) return -1;
+  return 0;
+}
+
+
+// Gets sort value for sort by type
+function getSortValue(value) {
+  const itemType = getItemType(value);
+  switch (itemType) {
+    case 'array': return 7
+    case 'object': return 6
+    case 'empty object': return 5
+    case 'null': return 4
+    case 'boolean': return 3
+    case 'string': return 2
+    case 'number': return 1
+    default: return 100
+  }
 }
