@@ -1,9 +1,9 @@
 // Initializes the page 
 init();
 function init() {
-  const defaultUrls = ['https://www.reddit.com/r/news.json',
+  const defaultUrls = ['https://www.reddit.com/r/gifs.json',
     'https://anapioficeandfire.com/api/characters/583'];
-  fetchJSON(defaultUrls[1]);
+  fetchJSON(defaultUrls[0]);
 };
 
 // Fetches JSON data
