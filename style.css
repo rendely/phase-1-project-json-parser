@@ -13,29 +13,54 @@ main{
   border: 1px solid #000000;
   background-color: lightblue;
   color: #404040;
+  
 }
 
 .container{
   display: flex;
   flex-flow: row nowrap;
+  flex-grow: 0;
   flex-shrink: 0;
- 
+
 }
 
 .type-icon{
-  background-color: aqua;
   margin-right: 10px;
+  width: 50px;
 }
 
-.terminal .key{
-  width: 200px;
-  overflow:hidden;
-  margin-right: 10px;
+.terminal .key {
+  width: 250px;
+  font-size: 14px;
 }
 
 .terminal .value{
-  overflow:hidden;
+  font-size: 12px;
 }
+
+.key{
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.value{
+  margin-left: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden; 
+  width: 100%;
+  font-size: 16px;
+  color: gray;
+}
+
+
+
+.value, .key{
+  display: flex;
+  align-items: center;
+  flex-grow: 0;
+}
+
 
 .terminal{
   background-color: white;;
