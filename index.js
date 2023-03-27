@@ -9,8 +9,9 @@ function init() {
   ];
   fetchJSON(defaultUrls[3]);
 };
-let shouldSort = true;
 var currentData;
+let shouldSort = true;
+
 
 // Fetches JSON data
 function fetchJSON(url) {
@@ -141,18 +142,6 @@ function unfilter() {
   })
 }
 
-// Triggers filtering from text input
-document.querySelector('#filter').addEventListener('input', (e) => {
-  unfilter();
-  filterKeep(e.target.value);
-})
-
-// Triggers sorting/not sorting 
-document.querySelector('#sort').addEventListener('input', (e) => {
-  shouldSort = !shouldSort;
-  document.querySelector('main').innerHTML = '';
-  renderDOMWithJSON.call(document.querySelector('main'), currentData)
-})
 
 // Selects entire value when clicked
 function addSelectItemEventListener(node) {
@@ -198,4 +187,38 @@ function getSortValue(value) {
     case 'number': return 1
     default: return 100
   }
+}
+
+// Add keyboard shortcuts
+document.addEventListener('keyup', (e) => {
+  console.log(e.key);
+  switch(e.key){
+    case 'Escape':
+      document.querySelector('#filter').blur();
+      break;
+    case 's': 
+      if (document.querySelector('#filter') !== document.activeElement) toggleSort();
+      break;
+    case 'f':
+      document.querySelector('#filter').focus();
+      break;
+  }
+})
+
+// Triggers filtering from text input
+document.querySelector('#filter').addEventListener('input', (e) => {
+  unfilter();
+  filterKeep(e.target.value);
+})
+
+// Triggers toggle of sorting
+document.querySelector('#sort').addEventListener('input', toggleSort)
+
+
+// Toggles sorting of the data
+function toggleSort() {
+  shouldSort = !shouldSort;
+  document.querySelector('main').innerHTML = '';
+  renderDOMWithJSON.call(document.querySelector('main'), currentData);
+  document.querySelector('#sort').toggleAttribute('checked');
 }
