@@ -1,24 +1,36 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>JSON Parser</title>
-    <link rel="stylesheet" href="style.css">
-  </head>
-  <body>
-    <header>
-      <label for="cars">Choose a dataset:</label>
-        <select id="dataset" name="dataset">
-          <option disabled selected value> -- select dataset -- </option>
-          <option value="0">Reddit</option>
-          <option value="1">Game of Thrones</option>
-          <option value="2">Chronicling America</option>
-          <option value="3">Disney Characters</option>
-        </select>
-      <label>Filter: </label><input type="text" id="filter" name="filter"></input>
-      <label>Sort? </label><input type="checkbox" id="sort" name="sort" ></input>
-    </header>
-    <main>
-    </main>
-    <script src="index.js"></script>
-  </body>
+
+<head>
+  <title>JSON Parser</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <header>
+    <button id="show_paste_input">Paste JSON</button>
+    <label for="cars">Or choose example data:</label>
+    <select id="dataset" name="dataset">
+      <option disabled selected value> -- select dataset -- </option>
+      <option value="0">Reddit</option>
+      <option value="1">Game of Thrones</option>
+      <option value="2">Chronicling America</option>
+      <option value="3">Disney Characters</option>
+    </select>
+    <label>Filter: </label><input type="text" id="filter" name="filter"></input>
+    <label>Sort? </label><input type="checkbox" id="sort" name="sort"></input>
+  </header>
+  <div id="paste_form">
+    <div>
+      <textarea id="paste_text" name="text" rows="30" cols="90" placeholder="Paste your JSON"></textarea>
+    </div>
+    <div>
+      <button id="submit_paste">Parse</button>
+    </div>
+  </div>
+  <main>
+  </main>
+  <script src="index.js"></script>
+</body>
+
 </html>
