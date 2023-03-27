@@ -10,7 +10,7 @@ function init(i=0) {
   fetchJSON(defaultUrls[i]);
 };
 var currentData;
-let shouldSort = true;
+let shouldSort = false;
 
 
 // Fetches JSON data
