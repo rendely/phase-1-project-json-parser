@@ -1,13 +1,13 @@
 // Initializes the page 
 init();
-function init() {
+function init(i=0) {
   const defaultUrls = [
     'https://www.reddit.com/r/gifs.json',
     'https://anapioficeandfire.com/api/characters/583',
     'https://chroniclingamerica.loc.gov/suggest/titles/?q=maryland',
     'https://api.disneyapi.dev/characters'
   ];
-  fetchJSON(defaultUrls[3]);
+  fetchJSON(defaultUrls[i]);
 };
 var currentData;
 let shouldSort = true;
@@ -22,9 +22,11 @@ function fetchJSON(url) {
       const data = url.match('reddit.com') ? allData.data.children : allData;
       currentData = data;
       //start rendering the DOM
+      resetDOM();
       renderDOMWithJSON.call(document.querySelector('main'), data)
     })
 }
+
 
 // Populates DOM based on object data
 function renderDOMWithJSON(data) {
@@ -98,6 +100,7 @@ function getItemType(value) {
   }
 }
 
+
 // Helper: Represents value appropriately based on type
 function valueFormat(value) {
   const itemType = getItemType(value);
@@ -112,6 +115,7 @@ function valueFormat(value) {
     default: return `Type: ${itemType}`
   }
 }
+
 
 // Helper: Gets an icon image based on the item type
 function getTypeIcon(itemType) {
@@ -129,6 +133,7 @@ function getTypeIcon(itemType) {
   return `<img src='icons/${iconFile}' alt='item type icon'>`
 }
 
+
 // Filters the DOM based on a keyword
 function filterKeep(string) {
   allDivs = document.querySelectorAll('div.item');
@@ -139,6 +144,7 @@ function filterKeep(string) {
     }
   })
 }
+
 
 // Unfilters the DOM
 function unfilter() {
@@ -160,6 +166,7 @@ function addSelectItemEventListener(node) {
   })
 }
 
+
 // Helper: Sorts by type
 function sortByType(a, b) {
   const aSortValue = getSortValue(this[a]);
@@ -169,14 +176,24 @@ function sortByType(a, b) {
   return 0;
 }
 
+
 // Helper: Sorts by key alphabetical
 function sortByKeyAlphabetically(a, b) {
-  const aSortValue = a;
-  const bSortValue = b;
+  let aSortValue;
+  let bSortValue;
+  if (!isNaN(Number(a)) && !isNaN(Number(b))){
+    aSortValue = Number(a);
+    bSortValue = Number(b);
+  }
+  else{
+    aSortValue = a;
+    bSortValue = b;
+  }
   if (aSortValue > bSortValue) return 1;
   if (aSortValue < bSortValue) return -1;
   return 0;
 }
+
 
 // Helper: Gets sort value for sort by type
 function getSortValue(value) {
@@ -193,9 +210,22 @@ function getSortValue(value) {
   }
 }
 
+// Toggles sorting of the data
+function toggleSort() {
+  shouldSort = !shouldSort;
+  resetDOM();
+  renderDOMWithJSON.call(document.querySelector('main'), currentData);
+  document.querySelector('#sort').toggleAttribute('checked');
+}
+
+// Reset DOM
+function resetDOM(){
+  document.querySelector('main').innerHTML = '';
+}
+
+
 // Add keyboard shortcuts
 document.addEventListener('keyup', (e) => {
-  console.log(e.key);
   switch(e.key){
     case 'Escape':
       document.querySelector('#filter').blur();
@@ -209,19 +239,20 @@ document.addEventListener('keyup', (e) => {
   }
 })
 
+
 // Triggers filtering from text input
 document.querySelector('#filter').addEventListener('input', (e) => {
   unfilter();
   filterKeep(e.target.value);
 })
 
+
 // Triggers toggle of sorting
 document.querySelector('#sort').addEventListener('input', toggleSort)
 
-// Toggles sorting of the data
-function toggleSort() {
-  shouldSort = !shouldSort;
-  document.querySelector('main').innerHTML = '';
-  renderDOMWithJSON.call(document.querySelector('main'), currentData);
-  document.querySelector('#sort').toggleAttribute('checked');
-}
+
+// Triggers changing data set via dropdown
+document.querySelector('#dataset').addEventListener('input', (e) =>{
+  const urlIndex = e.target.value;
+  init(urlIndex)  
+})
