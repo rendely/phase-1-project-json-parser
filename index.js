@@ -3,9 +3,10 @@ init();
 function init() {
   const defaultUrls = ['https://www.reddit.com/r/gifs.json',
     'https://anapioficeandfire.com/api/characters/583'];
-  fetchJSON(defaultUrls[1]);
+  fetchJSON(defaultUrls[0]);
 };
-
+let shouldSort = true;
+var currentData;
 // Fetches JSON data
 function fetchJSON(url) {
   fetch(url)
@@ -13,15 +14,48 @@ function fetchJSON(url) {
     .then(allData => {
       //only take list of reddit posts if reddit data
       const data = url.match('reddit.com') ? allData.data.children : allData;
+      currentData = data;
       //start rendering the DOM
       renderDOMWithJSON.call(document.querySelector('main'), data)
     })
+}
+
+// Sorts by type
+function sortByType(a,b){
+  const aSortValue = getSortValue(this[a]);
+  const bSortValue = getSortValue(this[b]);
+  if (aSortValue > bSortValue) return 1;
+  if (aSortValue < bSortValue) return -1;
+  return 0;
+}
+
+function sortByKey(a,b){
+  const aSortValue = a;
+  const bSortValue = b;
+  if (aSortValue > bSortValue) return 1;
+  if (aSortValue < bSortValue) return -1;
+  return 0;
+}
+
+function getSortValue(value){
+  const itemType = getItemType(value);
+  switch (itemType) {
+    case 'array': return 7
+    case 'object': return 6
+    case 'empty object': return 5
+    case 'null': return 4
+    case 'boolean': return 3
+    case 'string': return 2
+    case 'number': return 1
+    default: return 100
+  }
 }
 
 // Populates DOM based on object data
 function renderDOMWithJSON(data) {
   // Loop through all keys in the passed in object
   const keys = Object.keys(data);
+  if (shouldSort) keys.sort(sortByKey).sort(sortByType.bind(data));
   for (const key of keys) {
     // Create a DOM element to display the item (key and value pair)
     const itemElement = document.createElement('div');
@@ -139,6 +173,13 @@ function unfilter() {
 document.querySelector('#filter').addEventListener('input', (e) => {
   unfilter();
   filterKeep(e.target.value);
+})
+
+// Triggers sorting/not sorting 
+document.querySelector('#sort').addEventListener('input', (e)=>{
+   shouldSort = !shouldSort;
+   document.querySelector('main').innerHTML = '';
+   renderDOMWithJSON.call(document.querySelector('main'), currentData)
 })
 
 // Selects entire value when clicked

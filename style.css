@@ -1,11 +1,13 @@
-body{
-  background-color: darkslategray;
+body, header {
+  background-color: rgb(66, 66, 66);
+  text-align: center;
 }
-main{
+
+main {
   margin: auto;
   max-width: 800px;
-  
 }
+
 .item {
   margin-top: 5px;
   margin-left: 20px;
@@ -14,10 +16,10 @@ main{
   border: 1px solid #000000;
   background-color: lightblue;
   color: #404040;
-  
+
 }
 
-.container{
+.container {
   display: flex;
   flex-flow: row nowrap;
   flex-grow: 0;
@@ -25,7 +27,7 @@ main{
 
 }
 
-.type-icon{
+.type-icon {
   margin-right: 10px;
   width: 50px;
 }
@@ -35,20 +37,20 @@ main{
   font-size: 14px;
 }
 
-.terminal .value{
+.terminal .value {
   font-size: 12px;
 }
 
-.key{
+.key {
   font-weight: 500;
   font-size: 18px;
 }
 
-.value{
+.value {
   margin-left: 10px;
   text-overflow: ellipsis;
   white-space: nowrap;
-  overflow: hidden; 
+  overflow: hidden;
   width: 100%;
   font-size: 16px;
   color: gray;
@@ -56,26 +58,25 @@ main{
 
 
 
-.value, .key{
+.value,
+.key {
   display: flex;
   align-items: center;
   flex-grow: 0;
 }
 
-
-.terminal{
-  background-color: white;;
+.terminal {
+  background-color: white;
 }
 
 .hidden {
   display: none;
 }
 
-header{
+header {
   color: white;
   position: sticky;
-  top:0;
+  top: 0;
   z-index: 1;
-  background-color:darkslategray;
-  padding: 10px 10px 10px 10px;
+  padding: 10px 0px 10px 0px;
 }
