@@ -30,7 +30,8 @@ function fetchJSON(url) {
 function renderDOMWithJSON(data) {
   // Loop through all keys in the passed in object
   const keys = Object.keys(data);
-  if (shouldSort) keys.sort(sortByKey).sort(sortByType.bind(data));
+  // Conditionally sort the keys alphabetically and by type
+  if (shouldSort) keys.sort(sortByKeyAlphabetically).sort(sortByType.bind(data));
   for (const key of keys) {
     // Create a DOM element to display the item (key and value pair)
     const itemElement = document.createElement('div');
@@ -46,15 +47,18 @@ function renderDOMWithJSON(data) {
                              </div>`;
     if (itemType === 'object') itemElement.classList.add('object');
     if (itemType === 'null') itemElement.classList.add('null');
+    // Append the item DOM
     this.appendChild(itemElement);
+    // Add callback to make collapsible
     addCollapsibleEventListener.call(itemElement);
-
-    // recursively call render DOM function if object, otherwise it's a terminal item 
+    // recursively call render DOM function if object/array, otherwise it's a terminal item 
     if (itemType === 'object' || itemType === 'array') {
       renderDOMWithJSON.call(itemElement, data[key])
     }
     else {
+      // Add terminal class if no nested data to style differently
       itemElement.classList.add('terminal');
+      // Add click event listern to make it easy to copy key or value
       addSelectItemEventListener(itemElement.querySelector('.key'));
       addSelectItemEventListener(itemElement.querySelector('.value'));
     };
@@ -67,13 +71,15 @@ function addCollapsibleEventListener() {
   this.addEventListener('click', function toggleShow(e) {
     //Stop propogation so we don't also affect div above
     e.stopPropagation();
+    //Loop through all children and toggle hiding items
     Array.from(this.children).filter(e => e.nodeName === 'DIV' && e.classList.contains('item')).forEach(c => {
       c.classList.contains('hidden') ? c.classList.remove('hidden') : c.classList.add('hidden')
     })
   })
 }
 
-// Gets the type of value being handled  
+
+// Helper: Gets the type of value being handled  
 function getItemType(value) {
   if (value === null) {
     return 'null'
@@ -92,7 +98,7 @@ function getItemType(value) {
   }
 }
 
-// Represents value appropriately based on type
+// Helper: Represents value appropriately based on type
 function valueFormat(value) {
   const itemType = getItemType(value);
   switch (itemType) {
@@ -107,7 +113,7 @@ function valueFormat(value) {
   }
 }
 
-// Gets an icon image based on the item type
+// Helper: Gets an icon image based on the item type
 function getTypeIcon(itemType) {
   let iconFile = '';
   switch (itemType) {
@@ -152,11 +158,9 @@ function addSelectItemEventListener(node) {
     selection.removeAllRanges();
     selection.addRange(range);
   })
-
 }
 
-
-// Sorts by type
+// Helper: Sorts by type
 function sortByType(a, b) {
   const aSortValue = getSortValue(this[a]);
   const bSortValue = getSortValue(this[b]);
@@ -164,8 +168,9 @@ function sortByType(a, b) {
   if (aSortValue < bSortValue) return -1;
   return 0;
 }
-// Sorts by key alphabetical
-function sortByKey(a, b) {
+
+// Helper: Sorts by key alphabetical
+function sortByKeyAlphabetically(a, b) {
   const aSortValue = a;
   const bSortValue = b;
   if (aSortValue > bSortValue) return 1;
@@ -173,8 +178,7 @@ function sortByKey(a, b) {
   return 0;
 }
 
-
-// Gets sort value for sort by type
+// Helper: Gets sort value for sort by type
 function getSortValue(value) {
   const itemType = getItemType(value);
   switch (itemType) {
@@ -213,7 +217,6 @@ document.querySelector('#filter').addEventListener('input', (e) => {
 
 // Triggers toggle of sorting
 document.querySelector('#sort').addEventListener('input', toggleSort)
-
 
 // Toggles sorting of the data
 function toggleSort() {
