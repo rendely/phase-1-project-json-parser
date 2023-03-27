@@ -1,5 +1,5 @@
 // Initializes the page 
-init();
+// init();
 function init(i=3) {
   const defaultUrls = [
     'https://www.reddit.com/r/gifs.json',
@@ -23,7 +23,7 @@ function fetchJSON(url) {
       currentData = data;
       //start rendering the DOM
       resetDOM();
-      renderDOMWithJSON.call(document.querySelector('main'), data)
+      renderDOMWithJSON.call(document.querySelector('main'), data);
     })
 }
 
@@ -227,19 +227,20 @@ function resetDOM(){
 
 
 // Add keyboard shortcuts
-document.addEventListener('keyup', (e) => {
-  switch(e.key){
-    case 'Escape':
-      document.querySelector('#filter').blur();
-      break;
-    case 's': 
-      if (document.querySelector('#filter') !== document.activeElement) toggleSort();
-      break;
-    case 'f':
-      document.querySelector('#filter').focus();
-      break;
-  }
-})
+// document.addEventListener('keyup', (e) => {
+//   console.log(e.key);
+//   switch(e.key){
+//     case 'Escape':
+//       document.querySelector('#filter').blur();
+//       break;
+//     case 's': 
+//       if (document.querySelector('#filter') !== document.activeElement) toggleSort();
+//       break;
+//     case 'f':
+//       document.querySelector('#filter').focus();
+//       break;
+//   }
+// })
 
 // Trigger behaviors when hovering over item
 function addMouseOverEventListener(node){
@@ -258,6 +259,10 @@ function addMouseOverEventListener(node){
   })
 }
 
+function togglePasteForm(){
+  const form = document.querySelector('#paste_form');
+  form.classList.toggle('hidden');
+}
 
 // Triggers filtering from text input
 document.querySelector('#filter').addEventListener('input', (e) => {
@@ -274,4 +279,22 @@ document.querySelector('#sort').addEventListener('input', toggleSort)
 document.querySelector('#dataset').addEventListener('input', (e) =>{
   const urlIndex = e.target.value;
   init(urlIndex)  
+})
+
+// Triggers showing paste form:
+document.querySelector('#show_paste_input').addEventListener('click', ()=>{
+  togglePasteForm();
+})
+
+// Triggers parsing of pasted in JSON
+document.querySelector('#submit_paste').addEventListener('click', (e) =>{
+  const pasteText = document.querySelector('#paste_text').value;
+  try {
+    currentData = JSON.parse(pasteText);
+    resetDOM();
+    renderDOMWithJSON.call(document.querySelector('main'), currentData);
+    togglePasteForm();
+  }catch (e){
+    console.log(e);
+  }
 })
