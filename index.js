@@ -3,7 +3,7 @@ init();
 function init() {
   const defaultUrls = ['https://www.reddit.com/r/news.json',
     'https://anapioficeandfire.com/api/characters/583'];
-  fetchJSON(defaultUrls[0]);
+  fetchJSON(defaultUrls[1]);
 };
 
 // Fetches JSON data
@@ -32,15 +32,15 @@ function renderDOMWithJSON(data) {
     // Construct the item DOM 
     itemElement.innerHTML = `<div class='container'>
                              <div class='type-icon'>${getTypeIcon(itemType)}</div>
-                             <div class='key'>${key}:</div> 
-                             <div class='value'> ${itemValue.slice(0, 100)}</div>
+                             <div class='key'>${key}</div> 
+                             <div class='value'>${itemValue}</div>
                              </div>`;
     if (itemType === 'object') itemElement.classList.add('object');
     if (itemType === 'null') itemElement.classList.add('null');
     this.appendChild(itemElement);
     addCollapsibleEventListener.call(itemElement);
     // recursively call render DOM function if object, otherwise it's a terminal item 
-    if (itemType === 'object') {
+    if (itemType === 'object' || itemType === 'array') {
       renderDOMWithJSON.call(itemElement, data[key])
     }
     else {
@@ -89,6 +89,7 @@ function valueFormat(value) {
     case 'empty object': return `Object {empty}`
     case 'object': return `Object`
     case 'null': return 'Null'
+    case 'boolean': return String(value);
     case 'string': return `${value}`
     case 'number': return `${value}`
     default: return `Type: ${itemType}`
@@ -97,15 +98,26 @@ function valueFormat(value) {
 
 // Gets an icon image based on the item type
 function getTypeIcon(itemType) {
-  return 'TBD'
+  let iconFile = '';
+  switch(itemType){
+    case 'array': iconFile = 'array.svg'; break;
+    case 'empty object': iconFile = 'object.svg'; break;
+    case 'object': iconFile = 'object.svg'; break;
+    case 'null': iconFile = 'null.svg'; break;
+    case 'string': iconFile = 'string.svg'; break;
+    case 'number': iconFile = 'number.svg'; break;
+    case 'boolean': iconFile = 'boolean.svg'; break;
+    default: iconFile = 'unknown.svg'; break;
+  }
+  return `<img src='icons/${iconFile}' alt='item type icon'>`
 }
 
 // Filters the DOM based on a keyword
 function filterKeep(string) {
-  allDivs = document.querySelectorAll('div');
+  allDivs = document.querySelectorAll('div.item');
   allDivs.forEach(d => {
-    const parentText = d.textContent;
-    if (!parentText.match(string)) {
+    const textContent = d.textContent;
+    if (!textContent.match(string)) {
       d.classList.add('hidden');
     }
   })
