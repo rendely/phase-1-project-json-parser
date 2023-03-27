@@ -150,7 +150,7 @@ function filterKeep(string) {
 
 // Unfilters the DOM
 function unfilter() {
-  allDivs = document.querySelectorAll('div');
+  allDivs = document.querySelectorAll('main div');
   allDivs.forEach(d => {
     d.classList.remove('hidden');
   })
@@ -227,20 +227,22 @@ function resetDOM(){
 
 
 // Add keyboard shortcuts
-// document.addEventListener('keyup', (e) => {
-//   console.log(e.key);
-//   switch(e.key){
-//     case 'Escape':
-//       document.querySelector('#filter').blur();
-//       break;
-//     case 's': 
-//       if (document.querySelector('#filter') !== document.activeElement) toggleSort();
-//       break;
-//     case 'f':
-//       document.querySelector('#filter').focus();
-//       break;
-//   }
-// })
+document.addEventListener('keyup', (e) => {
+  console.log(e.key);
+  switch(e.key){
+    case 'Escape':
+      document.querySelector('#filter').blur();
+      break;
+    case 's': 
+      if (document.querySelector('#filter') !== document.activeElement &&
+          document.querySelector('#paste_text') !== document.activeElement) toggleSort();
+      break;
+    case 'f':
+      if (document.querySelector('#filter') !== document.activeElement &&
+          document.querySelector('#paste_text') !== document.activeElement) document.querySelector('#filter').focus();
+      break;
+  }
+})
 
 // Trigger behaviors when hovering over item
 function addMouseOverEventListener(node){
