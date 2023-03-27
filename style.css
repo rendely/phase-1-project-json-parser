@@ -27,6 +27,17 @@ main {
 
 }
 
+.preview{
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999;
+  max-width: 200px;
+  max-height: 200px;
+  width: auto;
+  height: auto;
+}
+
 .type-icon {
   margin-right: 10px;
   width: 40px;
