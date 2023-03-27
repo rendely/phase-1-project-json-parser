@@ -6,7 +6,7 @@ main{
   max-width: 800px;
   
 }
-div {
+.item {
   margin-top: 5px;
   margin-left: 20px;
   padding: 5px;
@@ -15,18 +15,32 @@ div {
   color: #404040;
 }
 
-item-value{
-  color: black;
+.container{
+  display: flex;
+  flex-flow: row nowrap;
+  flex-shrink: 0;
+ 
 }
 
-div[object]{
-  background-color: aliceblue;
+.type-icon{
+  background-color: aqua;
+  margin-right: 10px;
 }
 
-div[null]{
-  background-color: lightblue(204, 227, 235);
-  color: #696969;
+.terminal .key{
+  width: 200px;
+  overflow:hidden;
+  margin-right: 10px;
 }
+
+.terminal .value{
+  overflow:hidden;
+}
+
+.terminal{
+  background-color: white;;
+}
+
 .hidden {
   display: none;
 }
