@@ -1,6 +1,6 @@
 // Initializes the page 
 // init();
-function init(i=3) {
+function init(i = 3) {
   const defaultUrls = [
     'https://www.reddit.com/r/gifs.json',
     'https://anapioficeandfire.com/api/characters/583',
@@ -53,7 +53,7 @@ function renderDOMWithJSON(data) {
     this.appendChild(itemElement);
     // Add callback to make collapsible
     addCollapsibleEventListener.call(itemElement);
-    
+
     // recursively call render DOM function if object/array, otherwise it's a terminal item 
     if (itemType === 'object' || itemType === 'array') {
       renderDOMWithJSON.call(itemElement, data[key])
@@ -183,11 +183,11 @@ function sortByType(a, b) {
 function sortByKeyAlphabetically(a, b) {
   let aSortValue;
   let bSortValue;
-  if (!isNaN(Number(a)) && !isNaN(Number(b))){
+  if (!isNaN(Number(a)) && !isNaN(Number(b))) {
     aSortValue = Number(a);
     bSortValue = Number(b);
   }
-  else{
+  else {
     aSortValue = a;
     bSortValue = b;
   }
@@ -221,7 +221,7 @@ function toggleSort() {
 }
 
 // Reset DOM
-function resetDOM(){
+function resetDOM() {
   document.querySelector('main').innerHTML = '';
 }
 
@@ -229,41 +229,50 @@ function resetDOM(){
 // Add keyboard shortcuts
 document.addEventListener('keyup', (e) => {
   console.log(e.key);
-  switch(e.key){
+  switch (e.key) {
     case 'Escape':
       document.querySelector('#filter').blur();
       break;
-    case 's': 
+    case 's':
       if (document.querySelector('#filter') !== document.activeElement &&
-          document.querySelector('#paste_text') !== document.activeElement) toggleSort();
+        document.querySelector('#paste_text') !== document.activeElement) toggleSort();
       break;
     case 'f':
       if (document.querySelector('#filter') !== document.activeElement &&
-          document.querySelector('#paste_text') !== document.activeElement) document.querySelector('#filter').focus();
+        document.querySelector('#paste_text') !== document.activeElement) document.querySelector('#filter').focus();
       break;
   }
 })
 
 // Trigger behaviors when hovering over item
-function addMouseOverEventListener(node){
-  node.addEventListener('mouseover', (e) =>{
+function addMouseOverEventListener(node) {
+  node.addEventListener('mouseover', (e) => {
     if (e.target.innerText.match('png$|jpg$|jpeg$|gifv$|gif$')) {
-      console.log('mouseover',e.target);
+      console.log('mouseover', e.target);
       const img = document.createElement('img');
       img.className = 'preview';
       img.src = e.target.innerText;
       node.appendChild(img);
     }
   })
-  node.addEventListener('mouseout', (e) =>{
-    console.log('mouseout',e.target);
+  node.addEventListener('mouseout', (e) => {
+    console.log('mouseout', e.target);
     if (node.querySelector('img')) node.querySelector('img').remove();
   })
 }
 
-function togglePasteForm(){
+function togglePasteForm(shouldShow) {
   const form = document.querySelector('#paste_form');
-  form.classList.toggle('hidden');
+  if (shouldShow === undefined) {
+    form.classList.toggle('hidden');
+  }
+  else if (!shouldShow) {
+    form.classList.add('hidden')
+  }
+  else {
+    form.classList.remove('hidden');
+    form.scrollIntoView();
+  }
 }
 
 // Triggers filtering from text input
@@ -278,25 +287,27 @@ document.querySelector('#sort').addEventListener('input', toggleSort)
 
 
 // Triggers changing data set via dropdown
-document.querySelector('#dataset').addEventListener('input', (e) =>{
+document.querySelector('#dataset').addEventListener('input', (e) => {
   const urlIndex = e.target.value;
-  init(urlIndex)  
+  togglePasteForm(false);
+  init(urlIndex);
 })
 
 // Triggers showing paste form:
-document.querySelector('#show_paste_input').addEventListener('click', ()=>{
-  togglePasteForm();
+document.querySelector('#show_paste_input').addEventListener('click', () => {
+  togglePasteForm();  
+  resetDOM();
 })
 
 // Triggers parsing of pasted in JSON
-document.querySelector('#submit_paste').addEventListener('click', (e) =>{
+document.querySelector('#submit_paste').addEventListener('click', (e) => {
   const pasteText = document.querySelector('#paste_text').value;
   try {
     currentData = JSON.parse(pasteText);
     resetDOM();
     renderDOMWithJSON.call(document.querySelector('main'), currentData);
     togglePasteForm();
-  }catch (e){
+  } catch (e) {
     console.log(e);
   }
 })
