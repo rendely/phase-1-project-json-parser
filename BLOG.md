@@ -22,3 +22,9 @@ const titleCased = function(){
   return true
 }
 ```
+
+```javascript
+(function() {
+  return true;
+})();
+```
