@@ -127,12 +127,12 @@ cars = [
 ]
 ```
 
-If we were to use `sort()` without a compare function or use one of our earlier compare functions we'd be passing a car object for `a` and `b` and it wouldn't really make sense to compare two objects to each other. What we actually want to do is take a specific value from both objects and compare that value. For example we might want to take the price of the car object and sort all the cars based on the price value.
+If we were to use `sort()` without a compare function or use one of our earlier compare functions we'd be passing a car object for `a` and `b` and it wouldn't really make sense to compare two objects to each other. What we actually want to do is take a specific value from both objects and compare those values. For example, we might want to take the price of the car object and sort all the cars based on their prices.
 
 Let's see how we can modify our compare function to use a value from the object:
 
 ```javascript
-//Add a new parameter key
+//Add a new parameter: key
 function sortByNumberOnKeyAsc(key, asc = true) {
   return function (a, b) {
     //Use key to extract a specific value from the objects we're comparing
@@ -148,18 +148,21 @@ function sortByNumberOnKeyAsc(key, asc = true) {
 With this new compare function we can choose any key from our object to use for sorting. Since it's converting the values to a Number we should pick a key that is numeric. Let's sort by price:
 
 ```javascript
-console.log(cars.sort(sortByNumberOnKeyAsc('price')))
-// [
-//   { name: 'Juggernaut', class: 'SUV', price: 55000 },
-//   { name: 'Fury', class: 'SUV', price: 60000 },
-//   { name: 'Alpha', class: 'Sedan', price: 65000 },
-//   { name: 'Luxo', class: 'Sedan', price: 70000 },
-//   { name: 'Viper', class: 'Sports', price: 80000 },
-//   { name: 'Thunder', class: 'Sports', price: 90000 }
-// ]
+console.table(cars.sort(sortByNumberOnKeyAsc('price')))
+// ┌─────────┬──────────────┬──────────┬───────┐
+// │ (index) │     name     │  class   │ price │
+// ├─────────┼──────────────┼──────────┼───────┤
+// │    0    │ 'Juggernaut' │  'SUV'   │ 55000 │
+// │    1    │    'Fury'    │  'SUV'   │ 60000 │
+// │    2    │   'Alpha'    │ 'Sedan'  │ 65000 │
+// │    3    │    'Luxo'    │ 'Sedan'  │ 70000 │
+// │    4    │   'Viper'    │ 'Sports' │ 80000 │
+// │    5    │  'Thunder'   │ 'Sports' │ 90000 │
+// └─────────┴──────────────┴──────────┴───────┘
 ```
 
 What if we want to sort by car name instead? We can create a compare function without the `Number` function:
+
 ```javascript
 function sortAlphaByKeyAsc(key, asc = true) {
   return function (a, b) {
@@ -171,15 +174,17 @@ function sortAlphaByKeyAsc(key, asc = true) {
   }
 }
 
-console.log(cars.sort(sortAlphaByKeyAsc('name')));
-// [
-//   { name: 'Alpha', class: 'Sedan', price: 65000 },
-//   { name: 'Fury', class: 'SUV', price: 60000 },
-//   { name: 'Juggernaut', class: 'SUV', price: 55000 },
-//   { name: 'Luxo', class: 'Sedan', price: 70000 },
-//   { name: 'Thunder', class: 'Sports', price: 90000 },
-//   { name: 'Viper', class: 'Sports', price: 80000 }
-// ]
+console.table(cars.sort(sortAlphaByKeyAsc('name')));
+// ┌─────────┬──────────────┬──────────┬───────┐
+// │ (index) │     name     │  class   │ price │
+// ├─────────┼──────────────┼──────────┼───────┤
+// │    0    │   'Alpha'    │ 'Sedan'  │ 65000 │
+// │    1    │    'Fury'    │  'SUV'   │ 60000 │
+// │    2    │ 'Juggernaut' │  'SUV'   │ 55000 │
+// │    3    │    'Luxo'    │ 'Sedan'  │ 70000 │
+// │    4    │  'Thunder'   │ 'Sports' │ 90000 │
+// │    5    │   'Viper'    │ 'Sports' │ 80000 │
+// └─────────┴──────────────┴──────────┴───────┘
 ```
 
 Excellent! We can now sort a list of objects based on a string value or a number value. What else could we possibly need? Well...
@@ -215,31 +220,35 @@ function sortByClass(a,b) {
 And the moment of truth...
 
 ```javascript
-console.log(cars.sort(sortByClass))
-// [
-//   { name: 'Alpha', class: 'Sedan', price: 65000 },
-//   { name: 'Luxo', class: 'Sedan', price: 70000 },
-//   { name: 'Fury', class: 'SUV', price: 60000 },
-//   { name: 'Juggernaut', class: 'SUV', price: 55000 },
-//   { name: 'Thunder', class: 'Sports', price: 90000 },
-//   { name: 'Viper', class: 'Sports', price: 80000 }
-// ]
+console.table(cars.sort(sortByClass))
+// ┌─────────┬──────────────┬──────────┬───────┐
+// │ (index) │     name     │  class   │ price │
+// ├─────────┼──────────────┼──────────┼───────┤
+// │    0    │   'Alpha'    │ 'Sedan'  │ 65000 │
+// │    1    │    'Luxo'    │ 'Sedan'  │ 70000 │
+// │    2    │    'Fury'    │  'SUV'   │ 60000 │
+// │    3    │ 'Juggernaut' │  'SUV'   │ 55000 │
+// │    4    │  'Thunder'   │ 'Sports' │ 90000 │
+// │    5    │   'Viper'    │ 'Sports' │ 80000 │
+// └─────────┴──────────────┴──────────┴───────┘
 ```
 
 Wow! This is looking really good! Unfortunately the price sorting is a bit confusing. The sedans are priced low to high, but the other two categories are priced high to low. What if we wanted to sort by car class AND have the cars within each class sorted by price?
 
-Would we need a really complicated compare function that somehow uses both the class and price value? Luckily, not. We can actually chain the sort methods and compare functions we already created:
+Would we need a really complicated compare function that somehow uses both the class and price values? Luckily, not. We can actually chain multiple sort methods and reuse the compare functions we already created:
 
 ```javascript
-console.log(cars.sort(sortByNumberOnKeyAsc('price')).sort(sortByClass))
-// [
-//   { name: 'Alpha', class: 'Sedan', price: 65000 },
-//   { name: 'Luxo', class: 'Sedan', price: 70000 },
-//   { name: 'Juggernaut', class: 'SUV', price: 55000 },
-//   { name: 'Fury', class: 'SUV', price: 60000 },
-//   { name: 'Viper', class: 'Sports', price: 80000 },
-//   { name: 'Thunder', class: 'Sports', price: 90000 }
-// ]
+console.table(cars.sort(sortByNumberOnKeyAsc('price')).sort(sortByClass))
+// ┌─────────┬──────────────┬──────────┬───────┐
+// │ (index) │     name     │  class   │ price │
+// ├─────────┼──────────────┼──────────┼───────┤
+// │    0    │   'Alpha'    │ 'Sedan'  │ 65000 │
+// │    1    │    'Luxo'    │ 'Sedan'  │ 70000 │
+// │    2    │ 'Juggernaut' │  'SUV'   │ 55000 │
+// │    3    │    'Fury'    │  'SUV'   │ 60000 │
+// │    4    │   'Viper'    │ 'Sports' │ 80000 │
+// │    5    │  'Thunder'   │ 'Sports' │ 90000 │
+// └─────────┴──────────────┴──────────┴───────┘
 ```
 
 And voila! We have our data sorted by class and by price. Notice that we do the price sorting before the class sorting.
