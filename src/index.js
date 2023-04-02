@@ -132,7 +132,7 @@ function getTypeIcon(itemType) {
     case 'boolean': iconFile = 'boolean.svg'; break;
     default: iconFile = 'unknown.svg'; break;
   }
-  return `<img src='icons/${iconFile}' alt='item type icon'>`
+  return `<img src='images/${iconFile}' alt='item type icon'>`
 }
 
 
