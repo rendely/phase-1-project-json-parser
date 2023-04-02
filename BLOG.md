@@ -61,10 +61,13 @@ Hurray! It works!
 What if we wanted to sort the numbers in descending order instead? We could write a separate compare function, but that would fail our DRY (Don't Repeat Yourself) principle. Let's see how we can extend the functionality of our compare function.
 
 ```javascript
+//Factory function that returns the compare function with the behavior we want
+//The asc bool parameter will determine whether to sort ascending or descending
 function sortByNumberAsc(asc = true) {
   return function (a, b) {
     aVal = Number(a);
     bVal = Number(b);
+    //use a ternarny to change the sort direction based on the value of the asc bool
     if (aVal > bVal) return asc ? 1 : -1;
     if (aVal < bVal) return asc ? -1 : 1;
     return 0;
@@ -72,6 +75,21 @@ function sortByNumberAsc(asc = true) {
 }
 ```
 
+And testing to see if it works:
+
+```javascript
+console.log(numbers.sort(sortByNumberAsc))
+// [ 10, 20, 50, 100 ]
+console.log(numbers.sort(sortByNumberAsc(false)))
+// [ 100, 50, 20, 10 ]
+```
+
+Amazing! We can now quickly sort numeric values in either ascending or descending order.
+
+So far we've just been sorting a list of values, but frequently in javascript we'll need to sort objects. How will we do that?
+
 ## Sorting arrays of objects
+
+
 
 ## Creating custom sorting rules
