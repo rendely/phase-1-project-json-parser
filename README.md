@@ -4,7 +4,7 @@
 
 This web app is used for parsing a JSON dataset to better understand its structure, fields, and values. In particular, understanding a new JSON dataset can be challenging, this tool offers exploratory features to make it easier.
 
-![](json-parser-tool-screenshot.png)
+![](/src/images/json-parser-tool-screenshot.png)
 
 ## Current features
 
