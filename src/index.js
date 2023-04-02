@@ -46,6 +46,7 @@ function renderDOMWithJSON(data, path) {
                              <div class='type-icon'>${getTypeIcon(itemType)}</div>
                              <div class='key'>${key}</div> 
                              <div class='value'>${itemValue}</div>
+                             <button class='hidden'>Copy path</button>
                              </div>`;
     if (itemType === 'object') itemElement.classList.add('object');
     if (itemType === 'null') itemElement.classList.add('null');
@@ -64,7 +65,8 @@ function renderDOMWithJSON(data, path) {
       // Add click event listern to make it easy to copy key or value
       addSelectItemEventListener(itemElement.querySelector('.key'));
       addSelectItemEventListener(itemElement.querySelector('.value'));
-      addMouseOverEventListener(itemElement.querySelector('.value'));
+      addMouseOverImgEventListener(itemElement.querySelector('.value'));
+      addMouseOverCopyPathEventListener(itemElement);
     };
   }
 }
@@ -243,11 +245,10 @@ document.addEventListener('keyup', (e) => {
   }
 })
 
-// Trigger behaviors when hovering over item
-function addMouseOverEventListener(node) {
+// Trigger preview of image when hovering over item
+function addMouseOverImgEventListener(node) {
   node.addEventListener('mouseover', (e) => {
     if (e.target.innerText.match('png$|jpg$|jpeg$|gifv$|gif$')) {
-      console.log('mouseover', e.target);
       const img = document.createElement('img');
       img.className = 'preview';
       img.src = e.target.innerText;
@@ -255,11 +256,21 @@ function addMouseOverEventListener(node) {
     }
   })
   node.addEventListener('mouseout', (e) => {
-    console.log('mouseout', e.target);
     if (node.querySelector('img')) node.querySelector('img').remove();
   })
 }
 
+// Trigger showing copy path button when hovering on item
+function addMouseOverCopyPathEventListener(node) {
+  node.addEventListener('mouseover', (e) => {
+    node.querySelector('button').classList.remove('hidden');
+  })
+  node.addEventListener('mouseout', (e) => {
+    node.querySelector('button').classList.add('hidden');
+  })
+}
+
+//Helper function for toggling showing JSON paste form
 function togglePasteForm(shouldShow) {
   const form = document.querySelector('#paste_form');
   if (shouldShow === undefined) {
