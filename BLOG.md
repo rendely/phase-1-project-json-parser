@@ -90,6 +90,160 @@ So far we've just been sorting a list of values, but frequently in javascript we
 
 ## Sorting arrays of objects
 
+First let's create an example dataset to help us work through these examples. Let's create a cars dataset which has several cars. For each object we'll have the name, class and price of the car. 
 
+```javascript
+cars = [
+  {
+    "name": "Luxo",
+    "class": "Sedan",
+    "price": 70000
+  },
+  {
+    "name": "Alpha",
+    "class": "Sedan",
+    "price": 65000
+  },
+  {
+    "name": "Thunder",
+    "class": "Sports",
+    "price": 90000
+  },
+  {
+    "name": "Viper",
+    "class": "Sports",
+    "price": 80000
+  },
+  {
+    "name": "Fury",
+    "class": "SUV",
+    "price": 60000
+  },
+  {
+    "name": "Juggernaut",
+    "class": "SUV",
+    "price": 55000
+  }
+]
+```
+
+If we were to use `sort()` without a compare function or use one of our earlier compare functions we'd be passing a car object for `a` and `b` and it wouldn't really make sense to compare two objects to each other. What we actually want to do is take a specific value from both objects and compare that value. For example we might want to take the price of the car object and sort all the cars based on the price value.
+
+Let's see how we can modify our compare function to use a value from the object:
+
+```javascript
+//Add a new parameter key
+function sortByNumberOnKeyAsc(key, asc = true) {
+  return function (a, b) {
+    //Use key to extract a specific value from the objects we're comparing
+    aVal = Number(a[key]);
+    bVal = Number(b[key]);
+    if (aVal > bVal) return asc ? 1 : -1;
+    if (aVal < bVal) return asc ? -1 : 1;
+    return 0;
+  }
+}
+```
+
+With this new compare function we can choose any key from our object to use for sorting. Since it's converting the values to a Number we should pick a key that is numeric. Let's sort by price:
+
+```javascript
+console.log(cars.sort(sortByNumberOnKeyAsc('price')))
+// [
+//   { name: 'Juggernaut', class: 'SUV', price: 55000 },
+//   { name: 'Fury', class: 'SUV', price: 60000 },
+//   { name: 'Alpha', class: 'Sedan', price: 65000 },
+//   { name: 'Luxo', class: 'Sedan', price: 70000 },
+//   { name: 'Viper', class: 'Sports', price: 80000 },
+//   { name: 'Thunder', class: 'Sports', price: 90000 }
+// ]
+```
+
+What if we want to sort by car name instead? We can create a compare function without the `Number` function:
+```javascript
+function sortAlphaByKeyAsc(key, asc = true) {
+  return function (a, b) {
+    aVal = a[key];
+    bVal = b[key];
+    if (aVal > bVal) return asc ? 1 : -1;
+    if (aVal < bVal) return asc ? -1 : 1;
+    return 0;
+  }
+}
+
+console.log(cars.sort(sortAlphaByKeyAsc('name')));
+// [
+//   { name: 'Alpha', class: 'Sedan', price: 65000 },
+//   { name: 'Fury', class: 'SUV', price: 60000 },
+//   { name: 'Juggernaut', class: 'SUV', price: 55000 },
+//   { name: 'Luxo', class: 'Sedan', price: 70000 },
+//   { name: 'Thunder', class: 'Sports', price: 90000 },
+//   { name: 'Viper', class: 'Sports', price: 80000 }
+// ]
+```
+
+Excellent! We can now sort a list of objects based on a string value or a number value. What else could we possibly need? Well...
 
 ## Creating custom sorting rules
+
+What if we wanted to sort our cars by the car class, but we want it to be in a specific order that is not alphabetical or numeric? For example, we want to show all the sedans first, then SUVs, and finally sports cars.
+
+Turns out it's pretty easy to do this. We just need one intermediate step to convert the strings into a rank value that we can then sort numerically. (We could also use an alphabetical ranking system).
+
+```javascript
+// Sort Sedans first, then SUVs, then Sports
+// Take the car class string and return a rank value for sorting
+function rankClass(carClass){
+   switch(carClass){
+    case 'Sedan': return 1;
+    case 'SUV': return 2;
+    case 'Sports': return 3;
+   }
+
+}
+
+//Updated compare function to use the value returned by rankClass()
+function sortByClass(a,b) {
+    aVal = rankClass(a['class']);
+    bVal = rankClass(b['class']);
+    if (aVal > bVal) return 1;
+    if (aVal < bVal) return  -1;
+    return 0;
+}
+```
+
+And the moment of truth...
+
+```javascript
+console.log(cars.sort(sortByClass))
+// [
+//   { name: 'Alpha', class: 'Sedan', price: 65000 },
+//   { name: 'Luxo', class: 'Sedan', price: 70000 },
+//   { name: 'Fury', class: 'SUV', price: 60000 },
+//   { name: 'Juggernaut', class: 'SUV', price: 55000 },
+//   { name: 'Thunder', class: 'Sports', price: 90000 },
+//   { name: 'Viper', class: 'Sports', price: 80000 }
+// ]
+```
+
+Wow! This is looking really good! Unfortunately the price sorting is a bit confusing. The sedans are priced low to high, but the other two categories are priced high to low. What if we wanted to sort by car class AND have the cars within each class sorted by price?
+
+Would we need a really complicated compare function that somehow uses both the class and price value? Luckily, not. We can actually chain the sort methods and compare functions we already created:
+
+```javascript
+console.log(cars.sort(sortByNumberOnKeyAsc('price')).sort(sortByClass))
+// [
+//   { name: 'Alpha', class: 'Sedan', price: 65000 },
+//   { name: 'Luxo', class: 'Sedan', price: 70000 },
+//   { name: 'Juggernaut', class: 'SUV', price: 55000 },
+//   { name: 'Fury', class: 'SUV', price: 60000 },
+//   { name: 'Viper', class: 'Sports', price: 80000 },
+//   { name: 'Thunder', class: 'Sports', price: 90000 }
+// ]
+```
+
+And voila! We have our data sorted by class and by price. Notice that we do the price sorting before the class sorting.
+
+## Conclusion
+
+Hopefully these examples are a helpful introduction to sorting in Javascript and provide some code snippets that will cover many of the basic and intermediate sorting cases you'll need to solve for.
