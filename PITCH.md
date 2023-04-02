@@ -17,8 +17,6 @@ Developers frequently need to inspect new JSON data sources. While there are mul
 - Hover to show more actions
   - Click to toggle collapsing/expanding
   - Click to get path for selecting this value in javascript code (and generate javascript code to select it or all similar from set of siblings)
-- Compare button to compare same key across siblings
-- Pin button to pin the path + value to a pinned section (and track all the data of interest)
 - Filter by term to only show matching keys
 - Filter by term to only show matching values
 - Sort by alphabetical, longest to shortest
