@@ -23,13 +23,13 @@ function fetchJSON(url) {
       currentData = data;
       //start rendering the DOM
       resetDOM();
-      renderDOMWithJSON.call(document.querySelector('main'), data);
+      renderDOMWithJSON.call(document.querySelector('main'), data,[]);
     })
 }
 
 
 // Populates DOM based on object data
-function renderDOMWithJSON(data) {
+function renderDOMWithJSON(data, path) {
   // Loop through all keys in the passed in object
   const keys = Object.keys(data);
   // Conditionally sort the keys alphabetically and by type
@@ -42,7 +42,7 @@ function renderDOMWithJSON(data) {
     const itemValue = valueFormat(data[key]);
     const itemType = getItemType(data[key]);
     // Construct the item DOM 
-    itemElement.innerHTML = `<div class='container'>
+    itemElement.innerHTML = `<div class='container' path='${JSON.stringify([...path, key])}'>
                              <div class='type-icon'>${getTypeIcon(itemType)}</div>
                              <div class='key'>${key}</div> 
                              <div class='value'>${itemValue}</div>
@@ -56,7 +56,7 @@ function renderDOMWithJSON(data) {
 
     // recursively call render DOM function if object/array, otherwise it's a terminal item 
     if (itemType === 'object' || itemType === 'array') {
-      renderDOMWithJSON.call(itemElement, data[key])
+      renderDOMWithJSON.call(itemElement, data[key], [...path,key])
     }
     else {
       // Add terminal class if no nested data to style differently
@@ -216,7 +216,7 @@ function getSortValue(value) {
 function toggleSort() {
   shouldSort = !shouldSort;
   resetDOM();
-  renderDOMWithJSON.call(document.querySelector('main'), currentData);
+  renderDOMWithJSON.call(document.querySelector('main'), currentData, []);
   document.querySelector('#sort').toggleAttribute('checked');
 }
 
@@ -228,7 +228,6 @@ function resetDOM() {
 
 // Add keyboard shortcuts
 document.addEventListener('keyup', (e) => {
-  console.log(e.key);
   switch (e.key) {
     case 'Escape':
       document.querySelector('#filter').blur();
@@ -295,7 +294,7 @@ document.querySelector('#dataset').addEventListener('input', (e) => {
 
 // Triggers showing paste form:
 document.querySelector('#show_paste_input').addEventListener('click', () => {
-  togglePasteForm();  
+  togglePasteForm();
   resetDOM();
 })
 
@@ -305,7 +304,7 @@ document.querySelector('#submit_paste').addEventListener('click', (e) => {
   try {
     currentData = JSON.parse(pasteText);
     resetDOM();
-    renderDOMWithJSON.call(document.querySelector('main'), currentData);
+    renderDOMWithJSON.call(document.querySelector('main'), currentData, []);
     togglePasteForm();
   } catch (e) {
     console.log(e);
