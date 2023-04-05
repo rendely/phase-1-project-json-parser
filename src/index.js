@@ -23,7 +23,8 @@ function fetchJSON(url) {
       currentData = data;
       //start rendering the DOM
       resetDOM();
-      renderDOMWithJSON.call(document.querySelector('main'), data,[]);
+      renderDOMWithJSON.call(document.querySelector('main'), data);
+      document.querySelector('#paste_text').value = JSON.stringify(data, null, 2);
     })
 }
 
