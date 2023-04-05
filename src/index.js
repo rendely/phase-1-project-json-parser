@@ -38,11 +38,12 @@ function renderDOMWithJSON(data, path) {
     // Create a DOM element to display the item (key and value pair)
     const itemElement = document.createElement('div');
     itemElement.classList.add('item');
+    itemElement.setAttribute('path',`${JSON.stringify([...path, key])}`);
     // Get the item value and type
     const itemValue = valueFormat(data[key]);
     const itemType = getItemType(data[key]);
     // Construct the item DOM 
-    itemElement.innerHTML = `<div class='container' path='${JSON.stringify([...path, key])}'>
+    itemElement.innerHTML = `<div class='container'>
                              <div class='type-icon'>${getTypeIcon(itemType)}</div>
                              <div class='key'>${key}</div> 
                              <div class='value'>${itemValue}</div>
@@ -267,6 +268,13 @@ function addMouseOverCopyPathEventListener(node) {
   })
   node.addEventListener('mouseout', (e) => {
     node.querySelector('button').classList.add('hidden');
+  })
+  node.querySelector('button').addEventListener('click', (e) =>{
+    const pathArray = JSON.parse(node.getAttribute('path'));
+    const pathString = pathArray.reduce((acc,curr) => {
+      return `${acc}['${String(curr)}']`
+    },'currentData')
+     navigator.clipboard.writeText(pathString);
   })
 }
 
