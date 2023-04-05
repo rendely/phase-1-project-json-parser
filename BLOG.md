@@ -1,3 +1,9 @@
+This blog post is now published [here](https://rendely.github.io/jekyll/update/2023/04/02/phase-1-blog-post-sorting.html)
+
+***
+***
+***
+
 # Phase 1 Blog Post: Tips and tricks for sorting arrays
 
 ## Overview
