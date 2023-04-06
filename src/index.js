@@ -1,6 +1,9 @@
-// Initializes the page 
-// init();
-function init(i = 3) {
+//Global variables
+var currentData; //store the currentData
+var shouldSort = false; //determine if sorting is enabled or disbaled
+
+// Loads one of the default datasets when chosen from a dropdown
+function loadDefaultDataset(i = 3) {
   const defaultUrls = [
     'https://www.reddit.com/r/gifs.json',
     'https://anapioficeandfire.com/api/characters/583',
@@ -9,9 +12,6 @@ function init(i = 3) {
   ];
   fetchJSON(defaultUrls[i]);
 };
-var currentData;
-let shouldSort = false;
-
 
 // Fetches JSON data
 function fetchJSON(url) {
@@ -39,6 +39,7 @@ function renderDOMWithJSON(data, path) {
     // Create a DOM element to display the item (key and value pair)
     const itemElement = document.createElement('div');
     itemElement.classList.add('item');
+    // Store the path of that item into an attribute 
     itemElement.setAttribute('path',`${JSON.stringify([...path, key])}`);
     // Get the item value and type
     const itemValue = valueFormat(data[key]);
@@ -64,12 +65,14 @@ function renderDOMWithJSON(data, path) {
     else {
       // Add terminal class if no nested data to style differently
       itemElement.classList.add('terminal');
-      // Add click event listern to make it easy to copy key or value
+      // Add click event listern to make it easy to copy key or value by selecting entire thing
       addSelectItemEventListener(itemElement.querySelector('.key'));
       addSelectItemEventListener(itemElement.querySelector('.value'));
+      // Add image preview on hover
       addMouseOverImgEventListener(itemElement.querySelector('.value'));
+      // Add button to copy path to that item
       addMouseOverCopyPathEventListener(itemElement);
-    };
+    }
   }
 }
 
@@ -87,7 +90,7 @@ function addCollapsibleEventListener() {
 }
 
 
-// Helper: Gets the type of value being handled  
+// Gets the type of value being handled  
 function getItemType(value) {
   if (value === null) {
     return 'null'
@@ -107,7 +110,7 @@ function getItemType(value) {
 }
 
 
-// Helper: Represents value appropriately based on type
+// Represents value appropriately based on type
 function valueFormat(value) {
   const itemType = getItemType(value);
   switch (itemType) {
@@ -123,7 +126,7 @@ function valueFormat(value) {
 }
 
 
-// Helper: Gets an icon image based on the item type
+// Gets an icon image based on the item type
 function getTypeIcon(itemType) {
   let iconFile = '';
   switch (itemType) {
@@ -152,7 +155,7 @@ function filterKeep(string) {
 }
 
 
-// Unfilters the DOM
+// Unfilters the DOM to reset state
 function unfilter() {
   allDivs = document.querySelectorAll('main div');
   allDivs.forEach(d => {
@@ -161,7 +164,7 @@ function unfilter() {
 }
 
 
-// Selects entire value when clicked
+// Selects entire key or value when clicked
 function addSelectItemEventListener(node) {
   node.addEventListener('click', () => {
     const selection = window.getSelection();
@@ -173,7 +176,7 @@ function addSelectItemEventListener(node) {
 }
 
 
-// Helper: Sorts by type
+// Callback to sort by type
 function sortByType(a, b) {
   const aSortValue = getSortValue(this[a]);
   const bSortValue = getSortValue(this[b]);
@@ -183,7 +186,7 @@ function sortByType(a, b) {
 }
 
 
-// Helper: Sorts by key alphabetical
+// Callback to sorts by key alphabetical
 function sortByKeyAlphabetically(a, b) {
   let aSortValue;
   let bSortValue;
@@ -201,7 +204,7 @@ function sortByKeyAlphabetically(a, b) {
 }
 
 
-// Helper: Gets sort value for sort by type
+// Gets sort value for sort by type
 function getSortValue(value) {
   const itemType = getItemType(value);
   switch (itemType) {
@@ -221,7 +224,7 @@ function toggleSort() {
   shouldSort = !shouldSort;
   resetDOM();
   renderDOMWithJSON.call(document.querySelector('main'), currentData, []);
-  document.querySelector('#sort').toggleAttribute('checked');
+  document.querySelector('#sort').checked = shouldSort;
 }
 
 // Reset DOM
@@ -229,20 +232,21 @@ function resetDOM() {
   document.querySelector('main').innerHTML = '';
 }
 
-
 // Add keyboard shortcuts
 document.addEventListener('keyup', (e) => {
+  // Check if input fields are focused to prevent misfiring keyboard shortcuts
+  const isInputFocused = !(document.querySelector('#filter') !== document.activeElement &&
+  document.querySelector('#paste_text') !== document.activeElement);
   switch (e.key) {
     case 'Escape':
       document.querySelector('#filter').blur();
+      document.querySelector('#paste_text').blur();
       break;
     case 's':
-      if (document.querySelector('#filter') !== document.activeElement &&
-        document.querySelector('#paste_text') !== document.activeElement) toggleSort();
+      if (!isInputFocused) toggleSort();
       break;
     case 'f':
-      if (document.querySelector('#filter') !== document.activeElement &&
-        document.querySelector('#paste_text') !== document.activeElement) document.querySelector('#filter').focus();
+      if (!isInputFocused) document.querySelector('#filter').focus();
       break;
   }
 })
@@ -270,6 +274,7 @@ function addMouseOverCopyPathEventListener(node) {
   node.addEventListener('mouseout', (e) => {
     node.querySelector('button').classList.add('hidden');
   })
+  // if the button is clicked copy the path to the clipboard
   node.querySelector('button').addEventListener('click', (e) =>{
     const pathArray = JSON.parse(node.getAttribute('path'));
     const pathString = pathArray.reduce((acc,curr) => {
@@ -279,7 +284,7 @@ function addMouseOverCopyPathEventListener(node) {
   })
 }
 
-//Helper function for toggling showing JSON paste form
+//Toggle showing JSON paste form
 function togglePasteForm(shouldShow) {
   const form = document.querySelector('#paste_form');
   if (shouldShow === undefined) {
@@ -309,7 +314,7 @@ document.querySelector('#sort').addEventListener('input', toggleSort)
 document.querySelector('#dataset').addEventListener('input', (e) => {
   const urlIndex = e.target.value;
   togglePasteForm(false);
-  init(urlIndex);
+  loadDefaultDataset(urlIndex);
 })
 
 // Triggers showing paste form:
