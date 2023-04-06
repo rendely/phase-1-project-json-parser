@@ -144,11 +144,25 @@ function getTypeIcon(itemType) {
 
 
 // Filters the DOM based on a keyword
-function filterKeep(string) {
-  allDivs = document.querySelectorAll('div.item');
+function filterByKeyword(string) {
+  unfilter();
+  const allDivs = document.querySelectorAll('div.item');
   allDivs.forEach(d => {
     const textContent = d.textContent.toLowerCase();
     if (!textContent.match(string.toLowerCase())) {
+      d.classList.add('hidden');
+    }
+  })
+}
+
+// Filters the DOM based on level of nesting
+function filterByLevel(level) {
+  unfilter();
+  const allDivs = document.querySelectorAll('div.item');
+  allDivs.forEach(d => {
+    const path = JSON.parse(d.getAttribute('path'));
+    const divLevel = path.length;
+    if (divLevel > level) {
       d.classList.add('hidden');
     }
   })
@@ -301,10 +315,13 @@ function togglePasteForm(shouldShow) {
 
 // Triggers filtering from text input
 document.querySelector('#filter').addEventListener('input', (e) => {
-  unfilter();
-  filterKeep(e.target.value);
+  filterByKeyword(e.target.value);
 })
 
+// Triggers filtering from levels dropdown
+document.querySelector('#levels').addEventListener('input', (e) => {
+  filterByLevel(e.target.value);
+})
 
 // Triggers toggle of sorting
 document.querySelector('#sort').addEventListener('input', toggleSort)
