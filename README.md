@@ -13,8 +13,5 @@ This web app is used for parsing a JSON dataset to better understand its structu
 - Expand/collapse arrays and objects
 - Sort the data. This tool first sorts by type (number, string, boolean, object, array), then by the key alphabetically. \[Keyboard shortcut: "s"\]
 - Filter to search for keywords in the key or value  \[Keyboard shortcut: "f"\]
-
-## Future features
-
 - Change how many levels are collapsed
 - Hover to get the javascript path for selecting that item
